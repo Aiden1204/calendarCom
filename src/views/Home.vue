@@ -1,24 +1,21 @@
 <template>
   <div class="all">
-    <p>11111</p>
+    <calendar></calendar>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
+import calendar from '@/components/calendar.vue'
 
 export default {
   name: 'home',
   components: {
-    // HelloWorld
+    calendar
   }
 }
 </script>
 <style scoped lang="less">
   .all {
-    p {
-      color: red;
-    }
   }
 </style>
