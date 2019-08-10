@@ -92,7 +92,7 @@
                 "Nov",
                 "Dec",
             ][m-1];
-            res = m + " " + y
+            res = m + " " + y;
             break;
           default:
             res = y + "年" + " " + m + "月";
