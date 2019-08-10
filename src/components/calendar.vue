@@ -29,7 +29,6 @@
       return {
         currentMonth:null, //当前视图展示的月份的时间戳
         currentDays:[], //当前视图展示的天数
-        chWeek:["日", "一", "二", "三", "四", "五", "六"], //中文星期
       }
     },
     props:{
@@ -37,28 +36,68 @@
       weekSortMark: {
         type: String,
         default() {
-          return "日"
+          return this.$t('weekText[0]')
         }
       },
     },
     computed:{
+      // 当前语言的星期文字
+      weekText: {
+        get: function () {
+          return this.$t('weekText')
+        },
+      },
+
       // 实际展示的星期顺序
       weekData: {
         // getter
         get: function () {
-          let index = this.chWeek.indexOf(this.weekSortMark);
-          let arrTemp = [...this.chWeek];
+          let _self = this;
+          let index = _self.weekText.indexOf(_self.weekSortMark);
+          // weekSortMark入参异常时给出警告，把星期天排第一个进行默认渲染
+          try {
+            if(index < 0){
+              index = 0;
+              throw new Error("weekSortMark异常，可能未与当前语种匹配")
+            }
+          }
+          catch (e) {
+            console.warn(e)
+          }
+          let arrTemp = [...this.weekText];
           arrTemp = [...arrTemp.slice(index),...arrTemp.slice(0,index)];
           return arrTemp
         },
       }
     },
     filters:{
-      // 将时间戳转为YYYY年MM日
+      // 将时间戳转为对应当前语言的年月格式
       yearMonthText(val){
         let y = val.getFullYear();
         let m = val.getMonth() + 1;
-        return y + "年" + " " + m + "月";
+        let res = "";
+        switch (window.localStorage.getItem('locale')) {
+          case "en-US":
+            m = [
+                "Jan",
+                "Feb",
+                "Mar",
+                "Apr",
+                "May",
+                "Jun",
+                "Jul",
+                "Aug",
+                "Sep",
+                "Oct",
+                "Nov",
+                "Dec",
+            ][m-1];
+            res = m + " " + y
+            break;
+          default:
+            res = y + "年" + " " + m + "月";
+        }
+        return res;
       }
     },
     watch:{

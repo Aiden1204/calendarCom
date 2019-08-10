@@ -1,6 +1,6 @@
 <template>
   <div class="all">
-    <calendar></calendar>
+    <calendar :weekSortMark="flag"></calendar>
   </div>
 </template>
 
@@ -15,7 +15,7 @@ export default {
   },
   data(){
     return {
-      flag:""
+      flag:"日"
     }
   }
 }
