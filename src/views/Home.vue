@@ -12,6 +12,11 @@ export default {
   name: 'home',
   components: {
     calendar
+  },
+  data(){
+    return {
+      flag:""
+    }
   }
 }
 </script>

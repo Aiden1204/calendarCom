@@ -29,86 +29,95 @@
       return {
         currentMonth:null, //当前视图展示的月份的时间戳
         currentDays:[], //当前视图展示的天数
+        chWeek:["日", "一", "二", "三", "四", "五", "六"], //中文星期
       }
     },
     props:{
-      // 星期的排序
-      weekData: {
-        type: Array,
+      // 星期的排序标识
+      weekSortMark: {
+        type: String,
         default() {
-          return [
-            // "日",
-            "一",
-            "二",
-            "三",
-            "四",
-            "五",
-            "六",
-            "日",
-            // "一",
-            // "二",
-            // "三",
-            // "四",
-          ]
+          return "日"
         }
       },
     },
     computed:{
-
+      // 实际展示的星期顺序
+      weekData: {
+        // getter
+        get: function () {
+          let index = this.chWeek.indexOf(this.weekSortMark);
+          let arrTemp = [...this.chWeek];
+          arrTemp = [...arrTemp.slice(index),...arrTemp.slice(0,index)];
+          return arrTemp
+        },
+      }
     },
     filters:{
       // 将时间戳转为YYYY年MM日
       yearMonthText(val){
         let y = val.getFullYear();
         let m = val.getMonth() + 1;
-        let res = y + "年" + " " + m + "月";
-        return res;
+        return y + "年" + " " + m + "月";
       }
     },
     watch:{
       // 当前视图的天数数组
       currentMonth:{
         deep:true,
-        handler(val){
+        handler(){
+          // 定义当月天数数据
           let arr = [];
           let counter = this.getTargetDays(this.currentMonth);
           // 获取第一天的时间戳
           let firstDay = new Date(JSON.parse(JSON.stringify(this.currentMonth)));
           firstDay.setDate(1);
-          // 获取第一天是星期几（0~6）
+          // 获取第一天是星期几（0~6）（日~六）
           let firstDayNum = firstDay.getDay();
           let sortFlag = null;
           switch (this.weekData[0]){
             case "日":
-              sortFlag = 6;
+              sortFlag = 0;
               break;
             case "一":
-              sortFlag = 5;
+              sortFlag = 1;
               break;
             case "二":
-              sortFlag = 4;
+              sortFlag = 2;
               break;
             case "三":
               sortFlag = 3;
               break;
             case "四":
-              sortFlag = 2;
+              sortFlag = 4;
               break;
             case "五":
-              sortFlag = 1;
+              sortFlag = 5;
               break;
             case "六":
-              sortFlag = 0;
+              sortFlag = 6;
               break;
           }
-          // 计算头部空白天数
-          let headBlank = sortFlag-(7-firstDayNum-1);
-          for(let i = 0; i<headBlank; i++){
+          // 计算上月补全天数
+          let headPart = null;
+          if(sortFlag <= firstDayNum){
+            headPart = firstDayNum - sortFlag;
+          }else {
+            headPart = 7 - (sortFlag - firstDayNum);
+          }
+          // 填充前个月天数
+          for(let i = 0; i < headPart; i++){
             arr.push("")
           }
-          console.log("firstDayNum",firstDayNum);
+          // 填充当月天数
           for(let i = 0; i<counter; i++){
             arr.push(i+1)
+          }
+          // 计算下月补全天数
+          let tailPart = arr.length % 7 === 0 ? 0 : (7 - (arr.length % 7));
+          // 填充下个月天数
+          for(let i = 0; i < tailPart; i++){
+            arr.push("")
           }
           this.currentDays = arr;
         }
@@ -117,7 +126,7 @@
     methods:{
       /**
        * 获取当前时间戳对应月份的天数
-       * @param {String,Date} target 目标的月份，可以为时间戳或可被转为时间戳的字符串
+       * @param  {String,Date} target 目标的月份，可以为时间戳或可被转为时间戳的字符串
        * @return {Number}  目标月份的天数
        */
         getTargetDays(target = new Date()){
@@ -156,8 +165,7 @@
       this.currentMonth = new Date();
     },
     mounted(){
-        let _self = this;
-        console.log(_self.getTargetDays(this.currentMonth))
+
     }
   }
 </script>
