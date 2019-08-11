@@ -1,7 +1,8 @@
-@allBg:#F8F8F8;
-@selectedColor: #FFFFFF;
-@selectedBg: #5DADFF;
-@selectedAreaBg: #B9D9FA;
+@allBg:#F8F8F8; //整体背景色
+@todayColor:#409eff; //今天颜色
+@selectedColor: #FFFFFF; //选择的日期的文字颜色
+@selectedBg: #5DADFF; //选择日期的背景色
+@selectedAreaBg: #B9D9FA; //选择区间的背景色
 .all {
   width: 100vw;
   background-color: @allBg;
@@ -75,6 +76,9 @@
         height: 30px;
         border-radius: 50%;
         line-height: 30px;
+      }
+      .today {
+        color: @todayColor;
       }
       .selected {
         background-color: @selectedBg;

@@ -31,7 +31,10 @@
                 }"
             >
                 <span
-                    :class="{selected:item.date.getTime()===(firstSelected?firstSelected.getTime():null) || item.date.getTime()===(secondSelected?secondSelected.getTime():null)}"
+                    :class="{
+                    today:(item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
+                    selected:item.date.getTime()===(firstSelected?firstSelected.getTime():null) || item.date.getTime()===(secondSelected?secondSelected.getTime():null)
+                    }"
                 >
                   {{item.text}}
                 </span>
