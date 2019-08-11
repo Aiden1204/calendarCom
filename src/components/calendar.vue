@@ -21,7 +21,7 @@
         <div class="daysDisplay">
             <div
                 class="dayItem"
-                v-for="(item,index) in currentDays"
+                v-for="item in currentDays"
                 :key="item.date.toString()"
                 v-tap="{fn:chooseDate,date:item.date}"
                 :class="{
@@ -90,6 +90,7 @@
             }
           }
           catch (e) {
+            // eslint-disable-next-line no-console
             console.warn(e)
           }
           let arrTemp = [...this.weekText];
