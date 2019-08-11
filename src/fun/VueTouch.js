@@ -78,7 +78,7 @@ export default class VueTouch {
     // 判断长按操作 @TODO 稍微有点触发时机上的问题，待修正
     g.time = setTimeout(function () {
       if (!g.leaved && !g.moved) {
-        g.touchType === "longtap" && g.callBack(e, g.binding.value);
+        g.touchType === "longtap" && g.callBack(g.binding.value, e);
         g.longTouched = true;
       }
     }.bind(g), 1000);
@@ -103,18 +103,18 @@ export default class VueTouch {
 
     // 判断滑动方向
     if (_dis > 18 && _timeDis < 300) {
-      g.touchType === "swipe" && g.callBack(e, g.binding.value);
+      g.touchType === "swipe" && g.callBack(g.binding.value,e);
       if (_angle >= 60 && _angle <= 120)
-        g.touchType === "swipedown" && g.callBack(e, g.binding.value);
+        g.touchType === "swipedown" && g.callBack(g.binding.value,e);
       if (_angle <= -60 && _angle >= -120)
-        g.touchType === "swipeup" && g.callBack(e, g.binding.value);
+        g.touchType === "swipeup" && g.callBack(g.binding.value,e);
       if (_angle <= 20 && _angle >= -20)
-        g.touchType === "swipeleft" && g.callBack(e, g.binding.value);
+        g.touchType === "swipeleft" && g.callBack(g.binding.value,e);
       if ((_angle <= -160 && _angle > -180) || (_angle >= 160 && _angle <= 180))
-        g.touchType === "swiperight" && g.callBack(e, g.binding.value);
+        g.touchType === "swiperight" && g.callBack(g.binding.value,e);
     } else {
       if (!g.longTouched && !g.moved) {
-        g.touchType === "tap" && g.callBack(e, g.binding.value);
+        g.touchType === "tap" && g.callBack(g.binding.value,e);
         g.leaved = true;
       }
     }

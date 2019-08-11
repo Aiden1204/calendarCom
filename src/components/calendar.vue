@@ -5,13 +5,13 @@
         v-swiperight="{fn:changeMonthView,flag:'next'}"
     >
         <div class="yearMonthDisplay">
-            <div class="leftIcon" v-tap="{fn:changeMonthView,flag:'last'}">
+            <div class="leftIcon" v-tap="{fn:changeMonthView,mark:'last'}">
                 <i></i>
             </div>
             <span>
                 {{currentMonth | yearMonthText}}
             </span>
-            <div class="rightIcon" v-tap="{fn:changeMonthView,flag:'next'}">
+            <div class="rightIcon" v-tap="{fn:changeMonthView,mark:'next'}">
                 <i></i>
             </div>
         </div>
@@ -32,7 +32,8 @@
             >
                 <span
                     :class="{
-                    today:(item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
+                    notThisMonth:item.date.getMonth() !== currentMonth.getMonth(),
+                    today:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(''+new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
                     selected:item.date.getTime()===(firstSelected?firstSelected.getTime():null) || item.date.getTime()===(secondSelected?secondSelected.getTime():null)
                     }"
                 >
@@ -59,8 +60,8 @@
       mode: {
         type: String,
         default() {
-          // return "single"
-          return "section"
+          return "single"
+          // return "section"
         }
       },
       // 星期的排序标识
@@ -239,10 +240,11 @@
 
       /**
        * 选择日期
-       * @param {Object} e 触发方法的对象信息
        * @param {Object} val val.date当前选中的时间戳
+       * @param {Object} e 触发方法的对象信息
        */
-      chooseDate(e,val){
+      // eslint-disable-next-line no-unused-vars
+      chooseDate(val,e={}){
         let _self = this;
         switch (_self.mode) {
           case "single":
@@ -279,27 +281,32 @@
 
       /**
        * 改变当前视图的月份
+       * @param {Object} val val.mark:“next”往后一个月，val.mark:"last"往前一个月,val.mark也可以为时间戳或可转为时间戳的字符串
        * @param {Object} e 触发方法的对象信息
-       * @param {Object} val val.flag:“next”往后一个月，val.flag:"last"往前一个月
        */
-      changeMonthView(e,val){
+      // eslint-disable-next-line no-unused-vars
+      changeMonthView(val,e={}){
         let temp = new Date(JSON.parse(JSON.stringify(this.currentMonth)));
-        switch (val.flag){
-            case "next":
-                temp.setMonth(temp.getMonth() + 1);
-                this.currentMonth = temp;
-                break;
-            case "last":
-                temp.setMonth(temp.getMonth() - 1);
-                this.currentMonth = temp;
-                break;
+        switch (val.mark){
+          case "next":
+            temp.setMonth(temp.getMonth() + 1);
+            this.currentMonth = temp;
+            break;
+          case "last":
+            temp.setMonth(temp.getMonth() - 1);
+            this.currentMonth = temp;
+            break;
+          default:
+            this.currentMonth = new Date(JSON.parse(JSON.stringify(val.mark)));
         }
       },
 
     },
     created(){
-      // 获取当前时间
-      this.currentMonth = new Date();
+      // 获取并跳转当前年月
+      this.changeMonthView({
+        mark:new Date()
+      });
     },
     mounted(){
 
