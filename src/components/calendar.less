@@ -1,7 +1,10 @@
-@varf: red;
+@allBg:#F8F8F8;
+@selectedColor: #FFFFFF;
+@selectedBg: #5DADFF;
+@selectedAreaBg: #B9D9FA;
 .all {
   width: 100vw;
-  background-color: #cccccc;
+  background-color: @allBg;
   .yearMonthDisplay {
     display: flex;
     justify-content: space-between;
@@ -9,7 +12,6 @@
     .leftIcon {
       width: 10vw;
       height: 10vw;
-      background-color: palegreen;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -27,7 +29,6 @@
     .rightIcon {
       width: 10vw;
       height: 10vw;
-      background-color: palegreen;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -49,6 +50,7 @@
     align-items: center;
     .weekItem{
       width: 100/7vw;
+      margin: 5px 0;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -61,16 +63,32 @@
     flex-wrap:wrap;
     .dayItem {
       width: 100/7vw;
+      margin: 5px 0;
+      //background-color: @varf;
       display: flex;
       align-items: center;
       justify-content: center;
       >span {
         text-align: center;
         display: inline-block;
-        width: 20px;
-        height: 20px;
-        background-color: @varf;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        line-height: 30px;
       }
+      .selected {
+        background-color: @selectedBg;
+        color: @selectedColor;
+      }
+    }
+    .selectedMiddle {
+      background-color: @selectedAreaBg;
+    }
+    .selectedStart {
+      background: linear-gradient(to right, transparent, transparent 50%, @selectedAreaBg 50%);
+    }
+    .selectedEnd {
+      background: linear-gradient(to left, transparent, transparent 50%, @selectedAreaBg 50%);
     }
   }
 }

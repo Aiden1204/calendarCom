@@ -1,6 +1,6 @@
 {
   "name": "c_com_test",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "private": false,
   "main": "./src/index.js",
   "scripts": {
