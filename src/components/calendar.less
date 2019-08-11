@@ -1,0 +1,76 @@
+@varf: red;
+.all {
+  width: 100vw;
+  background-color: #cccccc;
+  .yearMonthDisplay {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .leftIcon {
+      width: 10vw;
+      height: 10vw;
+      background-color: palegreen;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left: 5px;
+      i {
+        display: block;
+        box-sizing: border-box;
+        width: 10px;
+        height: 10px;
+        border-top: 1px solid black;
+        border-left: 1px solid black;
+        transform: rotate(-0.125turn);
+      }
+    }
+    .rightIcon {
+      width: 10vw;
+      height: 10vw;
+      background-color: palegreen;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-right: 5px;
+      i {
+        display: block;
+        box-sizing: border-box;
+        width: 10px;
+        height: 10px;
+        border-top: 1px solid black;
+        border-right: 1px solid black;
+        transform: rotate(0.125turn);
+      }
+    }
+  }
+  .weekDisplay {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .weekItem{
+      width: 100/7vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .daysDisplay {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap:wrap;
+    .dayItem {
+      width: 100/7vw;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      >span {
+        text-align: center;
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        background-color: @varf;
+      }
+    }
+  }
+}

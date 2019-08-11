@@ -17,6 +17,16 @@ const i18n = new VueI18n({
   }
 });
 
+// 注册相关touch指令
+import VueTouch from "./fun/VueTouch.js"
+for(let x of ["tap","swipe","swipeleft","swiperight","swipedown","swipeup","longtap"]){
+  Vue.directive(x, {
+    bind: function (el, binding) {
+      new VueTouch(el, binding, x);
+    }
+  });
+}
+
 Vue.config.productionTip = false;
 
 new Vue({

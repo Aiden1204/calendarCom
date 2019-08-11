@@ -1,13 +1,17 @@
 <template>
-    <div class="all">
+    <div
+            class="all"
+            v-swipeleft="{fn:changeMonthView,flag:'last'}"
+            v-swiperight="{fn:changeMonthView,flag:'next'}"
+    >
         <div class="yearMonthDisplay">
-            <div class="leftIcon" @click.stop="changeMonthView('last')">
+            <div class="leftIcon" v-tap="{fn:changeMonthView,flag:'last'}">
                 <i></i>
             </div>
             <span>
                 {{currentMonth | yearMonthText}}
             </span>
-            <div class="rightIcon" @click.stop="changeMonthView('next')">
+            <div class="rightIcon" v-tap="{fn:changeMonthView,flag:'next'}">
                 <i></i>
             </div>
         </div>
@@ -163,6 +167,9 @@
       }
     },
     methods:{
+      test(){
+        console.log("1111")
+      },
       /**
        * 获取当前时间戳对应月份的天数
        * @param  {String,Date} target 目标的月份，可以为时间戳或可被转为时间戳的字符串
@@ -182,11 +189,12 @@
 
       /**
        * 改变当前视图的月份
-       * @param {String} flag “next”往后一个月，"last"往前一个月
+       * @param {Object} e “next”往后一个月，"last"往前一个月
+       * @param {Object} val val.flag:“next”往后一个月，val.flag:"last"往前一个月
        */
-      changeMonthView(flag){
+      changeMonthView(e,val){
         let temp = new Date(JSON.parse(JSON.stringify(this.currentMonth)))
-        switch (flag){
+        switch (val.flag){
             case "next":
                 temp.setMonth(temp.getMonth() + 1);
                 this.currentMonth = temp;
@@ -209,80 +217,4 @@
   }
 </script>
 
-<style scoped lang="less">
-    .all {
-        width: 100vw;
-        background-color: #cccccc;
-        .yearMonthDisplay {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            .leftIcon {
-                width: 10vw;
-                height: 10vw;
-                background-color: palegreen;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding-left: 5px;
-                i {
-                    display: block;
-                    box-sizing: border-box;
-                    width: 10px;
-                    height: 10px;
-                    border-top: 1px solid black;
-                    border-left: 1px solid black;
-                    transform: rotate(-0.125turn);
-                }
-            }
-            .rightIcon {
-                width: 10vw;
-                height: 10vw;
-                background-color: palegreen;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                padding-right: 5px;
-                i {
-                    display: block;
-                    box-sizing: border-box;
-                    width: 10px;
-                    height: 10px;
-                    border-top: 1px solid black;
-                    border-right: 1px solid black;
-                    transform: rotate(0.125turn);
-                }
-            }
-        }
-        .weekDisplay {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            .weekItem{
-                width: 100/7vw;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
-        }
-        .daysDisplay {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap:wrap;
-            .dayItem {
-                width: 100/7vw;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                >span {
-                    text-align: center;
-                    display: inline-block;
-                    width: 20px;
-                    height: 20px;
-                    background-color: red;
-                }
-            }
-        }
-    }
-</style>
+<style scoped lang="less" src="./calendar.less"></style>
