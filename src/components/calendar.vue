@@ -33,21 +33,19 @@
                 selectedEnd:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null),
                 }"
                     >
-                <span
-                        :class="{
-                    notThisMonth:item.date.getMonth() !== currentMonth.getMonth(),
-                    today:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(''+new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
-                    selected:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) || (''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null)
-                    }"
-                >
-                  {{item.text}}
-                </span>
+                        <span
+                                :class="{
+                            notThisMonth:item.date.getMonth() !== currentMonth.getMonth(),
+                            today:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(''+new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
+                            selected:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) || (''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null)
+                            }"
+                        >
+                          {{item.text}}
+                        </span>
                     </div>
                 </div>
             </transition>
         </div>
-
-
     </div>
 </template>
 
@@ -56,7 +54,7 @@
     name: "calendar",
     data(){
       return {
-        animationMark:"",
+        animationMark:"", //动画效果
         currentMonth:null, //当前视图展示的月份的时间戳
         currentDays:[], //当前视图展示的天数
         firstSelected:null, //单次选中 或 区间的第一次选择
@@ -72,6 +70,7 @@
           // return "section"
         }
       },
+
       // 星期的排序标识
       weekSortMark: {
         type: String,
@@ -144,7 +143,7 @@
     watch:{
       // 排序变化时重新计算视图
       weekSortMark(){
-        this.clearSelected()
+        this.clearSelected();
         this.changeMonthView({
           mark:new Date()
         });
@@ -261,7 +260,7 @@
       /**
        * 转换为时间对象并返回一个深拷贝的时间对象
        * @param {Object,String} date 时间对象或可以转化为实践对象的字符串
-       * @return {Object}
+       * @return {Date}
        */
       transDate(date){
         let userAgent = navigator.userAgent;
