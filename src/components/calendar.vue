@@ -256,7 +256,22 @@
        * @return {Object}
        */
       transDate(date){
-        return new Date(JSON.parse(JSON.stringify(date)));
+        let userAgent = navigator.userAgent;
+        if([null,undefined,""].includes(date)){
+          return new Date()
+        }
+        if(Object.prototype.toString.call(date).slice(8,-1) === "Date"){
+          return new Date(JSON.parse(JSON.stringify(date)));
+        }
+        if(Object.prototype.toString.call(date).slice(8,-1) === "String"){
+          // Safari不支持YYYY-MM-DD的格式，需要进行转换
+          if(userAgent.indexOf("Safari") > -1){
+            return new Date(JSON.parse(JSON.stringify(date)).replace(/-/g, "/"));
+          } else {
+            return new Date(JSON.parse(JSON.stringify(date)));
+          }
+        }
+        return new Date();
       },
 
       /**

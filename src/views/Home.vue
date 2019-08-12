@@ -85,15 +85,15 @@ export default {
     },
     toSpecialMonth(){
       this.$refs.calCom.changeMonthView({
-        mark:"2020-12-1"
+        mark:"2020-12-01"
       })
     },
     selectedOne(){
-      this.$refs.calCom.chooseDay("2019-8-1","firstSelected")
+      this.$refs.calCom.chooseDay("2019-08-01","firstSelected");
     },
     selectedSection(){
-      this.$refs.calCom.chooseDay("2019-8-3","firstSelected")
-      this.$refs.calCom.chooseDay("2019-8-9","secondSelected")
+      this.$refs.calCom.chooseDay("2019-08-03","firstSelected");
+      this.$refs.calCom.chooseDay("2019-08-09","secondSelected");
     }
   },
   watch:{
