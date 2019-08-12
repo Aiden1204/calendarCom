@@ -18,20 +18,23 @@
         <div class="weekDisplay">
             <div class="weekItem" v-for="item in weekData" :key="item">{{item}}</div>
         </div>
-        <div class="daysDisplay">
-            <div
-                class="dayItem"
-                v-for="item in currentDays"
-                :key="item.date.toString()"
-                v-tap="{fn:chooseDate,date:item.date}"
-                :class="{
+
+        <div class="animationBlock">
+            <transition :name="animationMark" >
+                <div class="daysDisplay"  :key="''+currentMonth.getMonth()">
+                    <div
+                            class="dayItem"
+                            v-for="item in currentDays"
+                            :key="''+currentMonth.getMonth()+item.date.toString()"
+                            v-tap="{fn:chooseDate,date:item.date}"
+                            :class="{
                 selectedMiddle:item.date>firstSelected && item.date<secondSelected,
                 selectedStart:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) && ![null,undefined,''].includes(secondSelected),
                 selectedEnd:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null),
                 }"
-            >
+                    >
                 <span
-                    :class="{
+                        :class="{
                     notThisMonth:item.date.getMonth() !== currentMonth.getMonth(),
                     today:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(''+new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
                     selected:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) || (''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null)
@@ -39,8 +42,12 @@
                 >
                   {{item.text}}
                 </span>
-            </div>
+                    </div>
+                </div>
+            </transition>
         </div>
+
+
     </div>
 </template>
 
@@ -49,6 +56,7 @@
     name: "calendar",
     data(){
       return {
+        animationMark:"",
         currentMonth:null, //当前视图展示的月份的时间戳
         currentDays:[], //当前视图展示的天数
         firstSelected:null, //单次选中 或 区间的第一次选择
@@ -344,7 +352,7 @@
 
 
       /**
-       * 改变当前视图的月份
+       * 改变当前视图的月份,会匹配对应的动画效果
        * @param {Object} val val.mark:“next”往后一个月，val.mark:"last"往前一个月,val.mark也可以为时间戳或可转为时间戳的字符串
        * @param {Object} e 触发方法的对象信息
        */
@@ -353,15 +361,25 @@
         let temp = this.transDate(this.currentMonth);
         switch (val.mark){
           case "next":
+            this.animationMark = "turn-left";
             temp.setMonth(temp.getMonth() + 1);
             this.currentMonth = temp;
             break;
           case "last":
+            this.animationMark = "turn-right";
             temp.setMonth(temp.getMonth() - 1);
             this.currentMonth = temp;
             break;
           default:
-            this.currentMonth = this.transDate(val.mark);
+            let target = this.transDate(val.mark);
+            if(target > temp){
+              this.animationMark = "turn-left";
+            } else if(target < temp){
+              this.animationMark = "turn-right";
+            } else {
+              this.animationMark = "";
+            }
+            this.currentMonth = target;
         }
       },
 

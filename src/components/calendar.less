@@ -58,7 +58,15 @@
       justify-content: center;
     }
   }
+  .animationBlock {
+    position: relative;
+    width: 100vw;
+    height: 200px;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
   .daysDisplay {
+    position: absolute;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -66,7 +74,6 @@
     .dayItem {
       width: 100/7vw;
       margin: 5px 0;
-      //background-color: @varf;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -99,4 +106,26 @@
       background: linear-gradient(to left, transparent, transparent 50%, @selectedAreaBg 50%);
     }
   }
+}
+
+.turn-left-enter {
+  transform: translate3d(100%, 0, 0);
+}
+.turn-left-leave-to {
+  transform: translate3d(-100%, 0, 0);
+}
+.turn-left-enter-active,
+.turn-left-leave-active {
+  transition: transform 0.2s ease;
+}
+
+.turn-right-enter {
+  transform: translate3d( -100%, 0, 0);
+}
+.turn-right-leave-to {
+  transform: translate3d(100%, 0,  0);
+}
+.turn-right-enter-active,
+.turn-right-leave-active {
+  transition: transform 0.2s ease;
 }
