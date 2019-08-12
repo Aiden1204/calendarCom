@@ -14,10 +14,10 @@ Vue.use(cal);
 
 ## 国际化
 组件可根据localStorage中的locale字段自动切换语言。默认中文。  
-需要默认语言可在组件use前修改locale字段。
+需要其它默认语言可在组件use前修改locale字段。
 ```javascript
 if(localStorage.getItem('locale')===""){
-  localStorage.setItem("locale","zh-CN");
+  localStorage.setItem("locale","en-US");
 }
 Vue.use(cal);
 ```
