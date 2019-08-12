@@ -16,6 +16,9 @@ const i18n = new VueI18n({
   }
 });
 
+// localStorage.setItem("locale","zh-CN");
+// localStorage.setItem("locale","en-US");
+
 // 注册相关touch指令
 import VueTouch from "./fun/VueTouch.js"
 for(let x of ["tap","swipe","swipeleft","swiperight","swipedown","swipeup","longtap"]){

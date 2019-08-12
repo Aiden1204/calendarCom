@@ -1,8 +1,8 @@
 <template>
     <div
         class="all"
-        v-swipeleft="{fn:changeMonthView,flag:'last'}"
-        v-swiperight="{fn:changeMonthView,flag:'next'}"
+        v-swipeleft="{fn:changeMonthView,mark:'last'}"
+        v-swiperight="{fn:changeMonthView,mark:'next'}"
     >
         <div class="yearMonthDisplay">
             <div class="leftIcon" v-tap="{fn:changeMonthView,mark:'last'}">
@@ -26,15 +26,15 @@
                 v-tap="{fn:chooseDate,date:item.date}"
                 :class="{
                 selectedMiddle:item.date>firstSelected && item.date<secondSelected,
-                selectedStart:item.date.getTime()===(firstSelected?firstSelected.getTime():null) && ![null,undefined,''].includes(secondSelected),
-                selectedEnd:item.date.getTime()===(secondSelected?secondSelected.getTime():null),
+                selectedStart:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) && ![null,undefined,''].includes(secondSelected),
+                selectedEnd:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null),
                 }"
             >
                 <span
                     :class="{
                     notThisMonth:item.date.getMonth() !== currentMonth.getMonth(),
                     today:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(''+new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
-                    selected:item.date.getTime()===(firstSelected?firstSelected.getTime():null) || item.date.getTime()===(secondSelected?secondSelected.getTime():null)
+                    selected:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) || (''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null)
                     }"
                 >
                   {{item.text}}
@@ -134,6 +134,19 @@
       }
     },
     watch:{
+      // 排序变化时重新计算视图
+      weekSortMark(){
+        this.clearSelected()
+        this.changeMonthView({
+          mark:new Date()
+        });
+      },
+
+      // 切换选择模式时清空原来的选项
+      mode(){
+        this.clearSelected();
+      },
+
       // 生成当前视图的天数数组
       currentMonth:{
         deep:true,
@@ -142,31 +155,38 @@
           let arr = [];
           let counter = this.getTargetDays(this.currentMonth);
           // 获取第一天的时间戳
-          let firstDay = new Date(JSON.parse(JSON.stringify(this.currentMonth)));
+          let firstDay =this.transDate(this.currentMonth);
           firstDay.setDate(1);
           // 获取第一天是星期几（0~6）（日~六）
           let firstDayNum = firstDay.getDay();
           let sortFlag = null;
           switch (this.weekData[0]){
             case "日":
+            case "Sun":
               sortFlag = 0;
               break;
             case "一":
+            case "Mon":
               sortFlag = 1;
               break;
             case "二":
+            case "Tues":
               sortFlag = 2;
               break;
             case "三":
+            case "Wed":
               sortFlag = 3;
               break;
             case "四":
+            case "Thur":
               sortFlag = 4;
               break;
             case "五":
+            case "Fri":
               sortFlag = 5;
               break;
             case "六":
+            case "Sat":
               sortFlag = 6;
               break;
           }
@@ -178,37 +198,37 @@
             headPart = 7 - (sortFlag - firstDayNum);
           }
           // 填充前个月天数
-          let lastTemp = new Date(JSON.parse(JSON.stringify(this.currentMonth)));
+          let lastTemp = this.transDate(this.currentMonth);
           lastTemp.setMonth(this.currentMonth.getMonth()-1);
           let lastTempSum = this.getTargetDays(lastTemp);
           for(let i = headPart; i > 0; i--){
             lastTemp.setDate(lastTempSum-i+1);
             arr.push({
               text:lastTempSum-i+1,
-              date:new Date(JSON.parse(JSON.stringify(lastTemp)))
+              date:this.transDate(lastTemp)
             })
           }
 
           // 填充当月天数
-          let currentTemp = new Date(JSON.parse(JSON.stringify(this.currentMonth)));
+          let currentTemp = this.transDate(this.currentMonth);
           for(let i = 0; i<counter; i++){
             currentTemp.setDate(i+1);
             arr.push({
               text:i+1,
-              date:new Date(JSON.parse(JSON.stringify(currentTemp)))
+              date:this.transDate(currentTemp)
             })
           }
 
           // 计算下月补全天数
           let tailPart = arr.length % 7 === 0 ? 0 : (7 - (arr.length % 7));
           // 填充下个月天数
-          let nextTemp = new Date(JSON.parse(JSON.stringify(this.currentMonth)));
+          let nextTemp = this.transDate(this.currentMonth);
           nextTemp.setMonth(this.currentMonth.getMonth()+1);
           for(let i = 0; i < tailPart; i++){
             nextTemp.setDate(i+1);
             arr.push({
               text:i+1,
-              date:new Date(JSON.parse(JSON.stringify(nextTemp)))
+              date:this.transDate(nextTemp)
             })
           }
           this.currentDays = arr;
@@ -218,18 +238,47 @@
       firstSelected:{
         deep:true,
         handler(val){
-          this.$emit('firstSelected', val?val.date:null);
+          this.$emit('firstSelected', val?val:null);
         }
       },
 
       secondSelected:{
         deep:true,
         handler(val){
-          this.$emit('secondSelected', val?val.date:null);
+          this.$emit('secondSelected', val?val:null);
         }
       }
     },
     methods:{
+      /**
+       * 转换为时间对象并返回一个深拷贝的时间对象
+       * @param {Object,String} date 时间对象或可以转化为实践对象的字符串
+       * @return {Object}
+       */
+      transDate(date){
+        return new Date(JSON.parse(JSON.stringify(date)));
+      },
+
+      /**
+       * 设置第一个或第二个日期
+       * @param {Object,String} date 时间对象或可以转化为实践对象的字符串
+       * @param {String}        mark firstSelected,secondSelected
+       */
+      chooseDay(date,mark){
+        let temp = this.transDate(date);
+        switch (mark){
+          case "firstSelected":
+            this.firstSelected = temp;
+            break;
+          case "secondSelected":
+            if(this.mode === "single"){
+              return
+            }
+            this.secondSelected = temp;
+            break;
+        }
+      },
+
       /**
        * 清除选择的日期
        */
@@ -239,7 +288,7 @@
       },
 
       /**
-       * 选择日期
+       * 点击选择日期
        * @param {Object} val val.date当前选中的时间戳
        * @param {Object} e 触发方法的对象信息
        */
@@ -268,7 +317,7 @@
        * @return {Number}  目标月份的天数
        */
         getTargetDays(target = new Date()){
-            let currentDate = new Date(target);
+            let currentDate = this.transDate(target);
             /* 获取当前月份(0~11) */
             let curMonth = currentDate.getMonth();
             // 往后推一个月
@@ -285,8 +334,8 @@
        * @param {Object} e 触发方法的对象信息
        */
       // eslint-disable-next-line no-unused-vars
-      changeMonthView(val,e={}){
-        let temp = new Date(JSON.parse(JSON.stringify(this.currentMonth)));
+      changeMonthView(val={mark:new Date()},e={}){
+        let temp = this.transDate(this.currentMonth);
         switch (val.mark){
           case "next":
             temp.setMonth(temp.getMonth() + 1);
@@ -297,7 +346,7 @@
             this.currentMonth = temp;
             break;
           default:
-            this.currentMonth = new Date(JSON.parse(JSON.stringify(val.mark)));
+            this.currentMonth = this.transDate(val.mark);
         }
       },
 
