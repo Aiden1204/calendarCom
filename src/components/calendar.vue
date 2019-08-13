@@ -37,7 +37,9 @@
                                 :class="{
                             notThisMonth:item.date.getMonth() !== currentMonth.getMonth(),
                             today:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(''+new Date().getFullYear()+new Date().getMonth()+new Date().getDate()),
-                            selected:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) || (''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null)
+                            highLight:(highLightArr.map(dateArrTrans).includes(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())),
+                            selected:(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(firstSelected?(''+firstSelected.getFullYear()+firstSelected.getMonth()+firstSelected.getDate()):null) || (''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate())===(secondSelected?(''+secondSelected.getFullYear()+secondSelected.getMonth()+secondSelected.getDate()):null),
+                            disableClickStyle:(disableClick.map(dateArrTrans).includes(''+item.date.getFullYear()+item.date.getMonth()+item.date.getDate()))
                             }"
                         >
                           {{item.text}}
@@ -54,7 +56,7 @@
     name: "calendar",
     data(){
       return {
-        lineCount:0,
+        lineCount:0, //动态计算组件行数，用来计算高度
         animationMark:"", //动画效果
         currentMonth:null, //当前视图展示的月份的时间戳
         currentDays:[], //当前视图展示的天数
@@ -77,6 +79,22 @@
         type: String,
         default() {
           return this.$t('weekText[0]')
+        }
+      },
+
+      // 高亮的日期
+      highLightArr: {
+        type: Array,
+        default() {
+          return []
+        }
+      },
+
+      // 不可点击的日期
+      disableClick: {
+        type: Array,
+        default() {
+          return []
         }
       },
     },
@@ -291,12 +309,26 @@
       },
 
       /**
+       * 将时间对象转为字符串YYYYMMDD
+       * @param {Date} date
+       * @return {String}
+       */
+      dateArrTrans(date){
+        let res = this.transDate(date);
+        res = ''+res.getFullYear()+res.getMonth()+res.getDate();
+        return res;
+      },
+
+      /**
        * 设置第一个或第二个日期
        * @param {Object,String} date 时间对象或可以转化为实践对象的字符串
        * @param {String}        mark firstSelected,secondSelected
        */
       chooseDay(date,mark){
         let temp = this.transDate(date);
+        if(this.disableClick.map(this.dateArrTrans).includes(''+temp.getFullYear()+temp.getMonth()+temp.getDate())){
+          return
+        }
         switch (mark){
           case "firstSelected":
             this.firstSelected = temp;
@@ -326,6 +358,9 @@
       // eslint-disable-next-line no-unused-vars
       chooseDate(val,e={}){
         let _self = this;
+        if(this.disableClick.map(this.dateArrTrans).includes(''+val.date.getFullYear()+val.date.getMonth()+val.date.getDate())){
+          return
+        }
         switch (_self.mode) {
           case "single":
             _self.firstSelected = val.date;
@@ -379,15 +414,14 @@
             this.currentMonth = temp;
             break;
           default:
-            let target = this.transDate(val.mark);
-            if(target > temp){
+            if(this.transDate(val.mark) > temp){
               this.animationMark = "turn-left";
-            } else if(target < temp){
+            } else if(this.transDate(val.mark) < temp){
               this.animationMark = "turn-right";
             } else {
               this.animationMark = "";
             }
-            this.currentMonth = target;
+            this.currentMonth = this.transDate(val.mark);
         }
       },
 

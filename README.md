@@ -34,6 +34,8 @@ Vue.use(cal);
 - @selectedColor: #FFFFFF; //选择的日期的文字颜色
 - @selectedBg: #5DADFF; //选择日期的背景色
 - @selectedAreaBg: #B9D9FA; //选择区间的背景色
+- @highLightColor:pink; //高亮日期的颜色
+- @disableClickColor:red; //不可点击的日期的颜色
 #### 定制方法
 ###### step 1
 新建一个calReset.less，名字不重要。  
@@ -68,6 +70,8 @@ import '../public/calReset.less';
 |  ----  | ----  | ----  | ----  |
 | mode  | 选择模式，单选single，多选section | String | single |
 | weekSortMark  | 星期的排序标识,表示第一个显示星期几，需与选择的语言对应。目前可传"日", "一", "二", "三", "四", "五", "六"。或"Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" | String | 取当前语言的星期天，中文"日"，英语"Sun" |
+| highLightArr  | 高亮的日期 | Array | [ ] |
+| disableClick  | 不可点击的日期 | Array | [ ] |
 
 #### Events
 |  事件名   | 说明  | 回调参数  |

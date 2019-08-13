@@ -6,6 +6,8 @@
               ref="calCom"
               :weekSortMark="weekSortMark"
               :mode="mode"
+              :highLightArr="highLightArr"
+              :disableClick="disableClick"
               @firstSelected="firstSelectedFun"
               @secondSelected="secondSelectedFun"
       ></calendar>
@@ -55,6 +57,16 @@
       <div>
         <button @click="selectedSection">选择8月3日~8月9日（限section模式）</button>
       </div>
+      <div>
+        <button @click="setHighLight">设置8月1日~8月3日高亮</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button @click="clearHighLight">清除</button>
+      </div>
+      <div>
+        <button @click="setDisabled">禁止选择8月25日~8月29日</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <button @click="clearDisabled">清除</button>
+      </div>
     </div>
   </div>
 </template>
@@ -77,6 +89,8 @@ export default {
       mode:"section",
       firstSelected:null,
       secondSelected:null,
+      highLightArr:[],
+      disableClick:[],
     }
   },
   methods:{
@@ -97,6 +111,28 @@ export default {
     selectedSection(){
       this.$refs.calCom.chooseDay("2019-08-03","firstSelected");
       this.$refs.calCom.chooseDay("2019-08-09","secondSelected");
+    },
+    setHighLight(){
+      this.highLightArr=[
+        "2019-08-01",
+        "2019-08-02",
+        "2019-08-03",
+      ]
+    },
+    clearHighLight(){
+      this.highLightArr=[]
+    },
+    setDisabled(){
+      this.disableClick=[
+        "2019-08-25",
+        "2019-08-26",
+        "2019-08-27",
+        "2019-08-28",
+        "2019-08-29",
+      ]
+    },
+    clearDisabled(){
+      this.disableClick=[]
     }
   },
   watch:{
