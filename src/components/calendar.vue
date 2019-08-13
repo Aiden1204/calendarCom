@@ -19,7 +19,7 @@
             <div class="weekItem" v-for="item in weekData" :key="item">{{item}}</div>
         </div>
 
-        <div class="animationBlock">
+        <div class="animationBlock" :style="{height:40*lineCount+'px'}">
             <transition :name="animationMark" >
                 <div class="daysDisplay"  :key="''+currentMonth.getMonth()">
                     <div
@@ -54,6 +54,7 @@
     name: "calendar",
     data(){
       return {
+        lineCount:0,
         animationMark:"", //动画效果
         currentMonth:null, //当前视图展示的月份的时间戳
         currentDays:[], //当前视图展示的天数
@@ -168,32 +169,39 @@
           let firstDayNum = firstDay.getDay();
           let sortFlag = null;
           switch (this.weekData[0]){
-            case "日":
-            case "Sun":
+            // case "日":
+            // case "Sun":
+            case this.$t('weekText[0]'):
               sortFlag = 0;
               break;
-            case "一":
-            case "Mon":
+            // case "一":
+            // case "Mon":
+            case this.$t('weekText[1]'):
               sortFlag = 1;
               break;
-            case "二":
-            case "Tues":
+            // case "二":
+            // case "Tues":
+            case this.$t('weekText[2]'):
               sortFlag = 2;
               break;
-            case "三":
-            case "Wed":
+            // case "三":
+            // case "Wed":
+            case this.$t('weekText[3]'):
               sortFlag = 3;
               break;
-            case "四":
-            case "Thur":
+            // case "四":
+            // case "Thur":
+            case this.$t('weekText[4]'):
               sortFlag = 4;
               break;
-            case "五":
-            case "Fri":
+            // case "五":
+            // case "Fri":
+            case this.$t('weekText[5]'):
               sortFlag = 5;
               break;
-            case "六":
-            case "Sat":
+            // case "六":
+            // case "Sat":
+            case this.$t('weekText[6]'):
               sortFlag = 6;
               break;
           }
@@ -238,6 +246,7 @@
               date:this.transDate(nextTemp)
             })
           }
+          this.lineCount = arr.length / 7;
           this.currentDays = arr;
         }
       },

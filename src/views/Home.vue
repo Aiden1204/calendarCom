@@ -24,6 +24,9 @@
           <input type="radio" v-model="weekSortMark" id="日" value="日">日<br>
           <input type="radio" v-model="weekSortMark" id="六" value="六">六<br>
           <input type="radio" v-model="weekSortMark" id="一" value="一">一<br>
+          <input type="radio" v-model="weekSortMark" id="二" value="二">二<br>
+          <input type="radio" v-model="weekSortMark" id="三" value="三">三<br>
+          <input type="radio" v-model="weekSortMark" id="四" value="四">四<br>
           <input type="radio" v-model="weekSortMark" id="Sun" value="Sun">Sun<br>
           <input type="radio" v-model="weekSortMark" id="Sat" value="Sat">Sat<br>
         </div>
