@@ -52,7 +52,7 @@ import '../public/calReset.less';
 ```
 在其它组件内部局部覆盖
 ```
-<style scoped lang="less" src="./calendar.less"></style>
+<style scoped lang="less" src="./calReset.less"></style>
 ```
 
 ## API
