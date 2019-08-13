@@ -1,6 +1,6 @@
 <template>
     <div
-        class="all"
+        class="calendarCom"
         v-swipeleft="{fn:changeMonthView,mark:'last'}"
         v-swiperight="{fn:changeMonthView,mark:'next'}"
     >
